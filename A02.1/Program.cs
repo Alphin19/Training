@@ -3,30 +3,38 @@
 // Copyright (c) Metamation India.//
 // ------------------------------------------------------------------------------------------------
 // Program.cs
-// // Program to guess a number thought of by the user between 1 and 100 using the user's responses
+// Program to guess a number thought of by the user between 1 and 100 using the user's responses
 // ------------------------------------------------------------------------------------------------
-Console.WriteLine ("Think of a number between 1 and 100, I'll guess it!");
-Console.WriteLine ("Answer each question with 'Y' for Yes or 'N' for No.");
-int number = 0;
-int divisor = 2;
-int remainder = 1;
-for (int i = 0; i < 7; i++) {
+Console.WriteLine ("Think of a number between 1 and 100.");
+Console.WriteLine ("Enter:");
+Console.WriteLine ("H - Higher");
+Console.WriteLine ("L - Lower");
+Console.WriteLine ("C - Correct");
+int low = 1;
+int high = 100;
+while (low <= high) {
+   int guess = (low + high) / 2;
    while (true) {
-      Console.Write ($"Is the remainder when divided by {divisor} >= {remainder}? (Y/N): ");
-      string? answer = Console.ReadLine ();
-      if (string.IsNullOrWhiteSpace (answer)) {
-         Console.WriteLine ("Please enter Y or N.");
+      Console.Write ($"Is your number {guess}? (H/L/C): ");
+      string? response = Console.ReadLine ();
+      if (string.IsNullOrWhiteSpace (response)) {
+         Console.WriteLine ("Please enter H, L or C.");
          continue;
       }
-      answer = answer.Trim ();
-      if (string.Equals (answer, "Y", StringComparison.OrdinalIgnoreCase)) {
-         number += remainder;
+      response = response.Trim ();
+      if (string.Equals (response, "C", StringComparison.OrdinalIgnoreCase)) {
+         Console.WriteLine ($"I guessed your number! It is {guess}.");
+         return;
+      }
+      if (string.Equals (response, "H", StringComparison.OrdinalIgnoreCase)) {
+         low = guess + 1;
          break;
       }
-      if (string.Equals (answer, "N", StringComparison.OrdinalIgnoreCase)) break;
-      Console.WriteLine ("Invalid input. please enter Y or N.");
+      if (string.Equals (response, "L", StringComparison.OrdinalIgnoreCase)) {
+         high = guess - 1;
+         break;
+      }
+      Console.WriteLine ("Invalid input. Please enter H, L or C.");
    }
-   remainder = divisor;
-   divisor *= 2;
 }
-Console.WriteLine ($"The number you thought of is {number}.");
+Console.WriteLine ("The responses are inconsistent.");
