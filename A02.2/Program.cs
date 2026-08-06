@@ -1,6 +1,6 @@
 ﻿// ------------------------------------------------------------------------------------------------
 // Training ~ A training program for new joinees at Metamation, Batch- July 2026.
-// Copyright (c) Metamation India.//
+// Copyright (c) Metamation India.
 // ------------------------------------------------------------------------------------------------
 // Program.cs
 // Program to guess a number thought of by the user between 1 and 100 using the user's responses
