@@ -14,12 +14,8 @@ while (low <= high) {
    Console.Write ($"Is your number higher than, lower than, or equal to {guess}? (H/L/C): ");
    string? response = Console.ReadLine ()?.Trim ().ToUpperInvariant ();
    switch (response) {
-      case "H":
-         low = guess + 1;
-         break;
-      case "L":
-         high = guess - 1;
-         break;
+      case "H":low = guess + 1; break;
+      case "L":high = guess - 1; break;
       case "C":
          Console.WriteLine ($"I guessed your number! It is {guess}.");
          return;
