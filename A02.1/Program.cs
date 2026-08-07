@@ -5,36 +5,27 @@
 // Program.cs
 // Program to guess a number thought of by the user between 1 and 100 using the user's responses
 // ------------------------------------------------------------------------------------------------
-Console.WriteLine ("Think of a number between 1 and 100.");
-Console.WriteLine ("Enter:");
-Console.WriteLine ("H - Higher");
-Console.WriteLine ("L - Lower");
-Console.WriteLine ("C - Correct");
 int low = 1;
 int high = 100;
+Console.WriteLine ($"Think of a number between {low} and {high}.");
+Console.WriteLine ("Enter:\nH - Higher\nL - Lower\nC - Correct");
 while (low <= high) {
    int guess = (low + high) / 2;
-   while (true) {
-      Console.Write ($"Is your number {guess}? (H/L/C): ");
-      string? response = Console.ReadLine ();
-      if (string.IsNullOrWhiteSpace (response)) {
-         Console.WriteLine ("Please enter H, L or C.");
-         continue;
-      }
-      response = response.Trim ();
-      if (string.Equals (response, "C", StringComparison.OrdinalIgnoreCase)) {
-         Console.WriteLine ($"I guessed your number! It is {guess}.");
-         return;
-      }
-      if (string.Equals (response, "H", StringComparison.OrdinalIgnoreCase)) {
+   Console.Write ($"Is your number higher than, lower than, or equal to {guess}? (H/L/C): ");
+   string? response = Console.ReadLine ()?.Trim ().ToUpperInvariant ();
+   switch (response) {
+      case "H":
          low = guess + 1;
          break;
-      }
-      if (string.Equals (response, "L", StringComparison.OrdinalIgnoreCase)) {
+      case "L":
          high = guess - 1;
          break;
-      }
-      Console.WriteLine ("Invalid input. Please enter H, L or C.");
+      case "C":
+         Console.WriteLine ($"I guessed your number! It is {guess}.");
+         return;
+      default:
+         Console.WriteLine ("Invalid input. Please enter H, L or C.");
+         break;
    }
 }
 Console.WriteLine ("The responses are inconsistent.");
