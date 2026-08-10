@@ -5,8 +5,7 @@
 // Program.cs
 // Program to guess a number thought of by the user between 1 and 100 using the user's responses
 // ------------------------------------------------------------------------------------------------
-int low = 1;
-int high = 100;
+var (low, high) = (1, 100);
 Console.WriteLine ($"Think of a number between {low} and {high}.");
 Console.WriteLine ("Enter:\nH - Higher\nL - Lower\nC - Correct");
 while (low <= high) {
