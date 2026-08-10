@@ -1,1 +1,28 @@
-﻿
+﻿// ------------------------------------------------------------------------------------------------
+// Training ~ A training program for new joinees at Metamation, Batch- July 2026.
+// Copyright (c) Metamation India.
+// ------------------------------------------------------------------------------------------------
+// Program.cs
+// Program to guess a number between 1 and 127 by asking the user questions based on the remainder.
+// ------------------------------------------------------------------------------------------------
+Console.WriteLine ("Think of a number between 1 and 127, I'll guess it!");
+Console.WriteLine ("Type 'Y' for yes and 'N' for no!");
+int number = 0;
+int divisor = 2;
+int remainder = 1;
+for (int i = 0; i < 7; i++) {
+   Console.Write ($"Is the remiander when divided by {divisor}>={remainder}");
+   string answer = Console.ReadLine ();
+   answer = answer.ToUpperInvariant ();
+   if (answer != "Y" && answer != "N") {
+      Console.WriteLine ("Invalid input. Please enter Y or N.");
+      i--;
+      continue;
+   }
+   if (answer == "Y") {
+      number += remainder;
+   }
+   remainder = divisor;
+   divisor *= 2;
+}
+Console.WriteLine ($"Your number is {number}!");
