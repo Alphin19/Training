@@ -6,12 +6,12 @@
 // Program to guess a number between 1 and 127 by asking the user questions based on the remainder.
 // ------------------------------------------------------------------------------------------------
 Console.WriteLine ("Think of a number between 1 and 127, I'll guess it!");
-Console.WriteLine ("Type 'Y' for yes and 'N' for no!");
+Console.WriteLine ("Answer each question with 'Y' for Yes or 'N' for No.");
 int number = 0;
 int divisor = 2;
 int remainder = 1;
 for (int i = 0; i < 7; i++) {
-   Console.Write ($"Is the remiander when divided by {divisor}>={remainder}");
+   Console.Write ($"Is the remainder when divided by {divisor} >= {remainder}? (Y/N): ");
    string answer = Console.ReadLine ();
    answer = answer.ToUpperInvariant ();
    if (answer != "Y" && answer != "N") {
@@ -19,9 +19,7 @@ for (int i = 0; i < 7; i++) {
       i--;
       continue;
    }
-   if (answer == "Y") {
-      number += remainder;
-   }
+   if (answer == "Y") number += remainder;
    remainder = divisor;
    divisor *= 2;
 }
