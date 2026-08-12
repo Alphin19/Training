@@ -15,9 +15,7 @@ for (int i = 0; i < 7; i++) {
    while (true) {
       Console.Write ($"Is the remainder when divided by {divisor} >= {remainder}? (Y/N): ");
       answer = (Console.ReadLine () ?? "").Trim ().ToUpperInvariant ();
-      if (answer == "Y" || answer == "N") {
-         break;
-      }
+      if (answer == "Y" || answer == "N") break;
       Console.WriteLine ("Invalid input. Please enter Y or N.");
    }
    if (answer == "Y") number += remainder;
