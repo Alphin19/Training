@@ -11,12 +11,14 @@ int number = 0;
 int divisor = 2;
 int remainder = 1;
 for (int i = 0; i < 7; i++) {
-   Console.Write ($"Is the remainder when divided by {divisor} >= {remainder}? (Y/N): ");
-   string answer = Console.ReadLine ()!.ToUpperInvariant ();
-   if (answer != "Y" && answer != "N") {
+   string answer;
+   while (true) {
+      Console.Write ($"Is the remainder when divided by {divisor} >= {remainder}? (Y/N): ");
+      answer = (Console.ReadLine () ?? "").Trim ().ToUpperInvariant ();
+      if (answer == "Y" || answer == "N") {
+         break;
+      }
       Console.WriteLine ("Invalid input. Please enter Y or N.");
-      i--;
-      continue;
    }
    if (answer == "Y") number += remainder;
    remainder = divisor;
