@@ -6,6 +6,7 @@
 // Spellbee game
 // ------------------------------------------------------------------------------------------------
 char[] validLetters = { 'U', 'X', 'A', 'L', 'T', 'N', 'E' };
+char firstLetter = validLetters[0];
 string filePath = "words.txt";
 string[] words = File.ReadAllLines (filePath);
 int score = 0;
@@ -27,6 +28,6 @@ foreach (var item in dict.OrderByDescending (x => x.Value.Score).ThenBy (x => x.
 Console.WriteLine ("----");
 Console.WriteLine ($"{score} total");
 
-bool IsValid (string word) => word.Contains (validLetters[0]) && word.All (validLetters.Contains);
+bool IsValid (string word) => word.Contains (firstLetter) && word.All (validLetters.Contains);
 
 bool IsPangram (string word) => validLetters.All (word.Contains);
