@@ -5,33 +5,28 @@
 // Program.cs
 // Spellbee game
 // ------------------------------------------------------------------------------------------------
-char[] valid_letters = { 'U', 'X', 'A', 'L', 'T', 'N', 'E' };
+char[] validLetters = { 'U', 'X', 'A', 'L', 'T', 'N', 'E' };
 string filePath = "words.txt";
 string[] words = File.ReadAllLines (filePath);
 int score = 0;
-Dictionary<string, int> List = new Dictionary<string, int> ();
-foreach (string word in words) if (is_valid (word)) total_score (word);
-void total_score (string word) {
-   int word_score = 0;
-   if (word.Length < 4) return;
-   if (word.Length == 4) word_score = 1;
-   else word_score = word.Length;
-   if (is_pangram (word)) word_score += 7;
-   score += word_score;
-   if (!List.ContainsKey (word)) List.Add (word, word_score);
+Dictionary<string, (int Score, bool IsPangram)> dict = new Dictionary<string, (int, bool)> ();
+foreach (string word in words) {
+   string validWord = word.ToUpper ();
+   if (!IsValid (validWord) || validWord.Length < 4 || dict.ContainsKey (validWord)) continue;
+   int wordScore = validWord.Length == 4 ? 1 : validWord.Length;
+   bool isPangram = IsPangram (validWord);
+   if (isPangram) wordScore += 7;
+   score += wordScore;
+   dict.Add (validWord, (wordScore, isPangram));
 }
-bool is_valid (string word) {
-   if (!word.Contains (valid_letters[0])) return false;
-   foreach (char letter in word) if (!valid_letters.Contains (letter)) return false;
-   return true;
-}
-bool is_pangram (string word) {
-   foreach (char letter in valid_letters) if (!word.Contains (letter)) return false;
-   return true;
-}
-foreach (var item in List.OrderByDescending (x => x.Value).ThenBy (x => x.Key)) {
-   if (is_pangram (item.Key)) Console.ForegroundColor = ConsoleColor.Green;
-   Console.WriteLine ($"{item.Key,-20} {item.Value}");
+foreach (var item in dict.OrderByDescending (x => x.Value.Score).ThenBy (x => x.Key)) {
+   if (item.Value.IsPangram) Console.ForegroundColor = ConsoleColor.Green;
+   Console.WriteLine ($"{item.Value.Score}. {item.Key}");
    Console.ResetColor ();
 }
-Console.WriteLine ($"\nTotal Score : {score}");
+Console.WriteLine ("----");
+Console.WriteLine ($"{score} total");
+
+bool IsValid (string word) => word.Contains (validLetters[0]) && word.All (validLetters.Contains);
+
+bool IsPangram (string word) => validLetters.All (word.Contains);
