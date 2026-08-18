@@ -10,24 +10,22 @@ char firstLetter = validLetters[0];
 string filePath = "words.txt";
 string[] words = File.ReadAllLines (filePath);
 int score = 0;
-Dictionary<string, (int Score, bool IsPangram)> dict = new Dictionary<string, (int, bool)> ();
+Dictionary<string, (int Score, bool IsPangram)> dict = [];
 foreach (string word in words) {
    string validWord = word.ToUpper ();
-   if (!IsValid (validWord) || validWord.Length < 4 || dict.ContainsKey (validWord)) continue;
+   if (!validWord.Contains (firstLetter) || !validWord.All (validLetters.Contains) ||
+      validWord.Length < 4 || dict.ContainsKey (validWord)) continue;
    int wordScore = validWord.Length == 4 ? 1 : validWord.Length;
-   bool isPangram = IsPangram (validWord);
+   bool isPangram = validLetters.All (validWord.Contains);
    if (isPangram) wordScore += 7;
    score += wordScore;
    dict.Add (validWord, (wordScore, isPangram));
 }
 foreach (var item in dict.OrderByDescending (x => x.Value.Score).ThenBy (x => x.Key)) {
    if (item.Value.IsPangram) Console.ForegroundColor = ConsoleColor.Green;
-   Console.WriteLine ($"{item.Value.Score}. {item.Key}");
+   Console.WriteLine ($"{item.Value.Score,3}. {item.Key}");
    Console.ResetColor ();
 }
 Console.WriteLine ("----");
 Console.WriteLine ($"{score} total");
 
-bool IsValid (string word) => word.Contains (firstLetter) && word.All (validLetters.Contains);
-
-bool IsPangram (string word) => validLetters.All (word.Contains);
