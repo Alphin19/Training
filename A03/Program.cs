@@ -28,4 +28,3 @@ foreach (var item in dict.OrderByDescending (x => x.Value.Score).ThenBy (x => x.
 }
 Console.WriteLine ("----");
 Console.WriteLine ($"{score} total");
-
