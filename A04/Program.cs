@@ -6,7 +6,7 @@
 // Spelling Bee - Letter Frequency
 // ------------------------------------------------------------------------------------------------
 string[] words = File.ReadAllLines ("words.txt");
-Dictionary<char, int> freq = new ();
+Dictionary<char, int> freq = [];
 foreach (string word in words) {
    foreach (char c in word.ToUpper ())
       if (c >= 'A' && c <= 'Z') freq[c] = freq.GetValueOrDefault (c) + 1;
