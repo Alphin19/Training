@@ -40,11 +40,11 @@ class Program {
       List<int[]> unique = [];
       HashSet<string> seen = [];
       foreach (int[] sln in solutions) {
-         List<string> v = GetVariants (sln);
-         string smallest = v[0];
-         foreach (string variant in v)
-            if (variant.CompareTo (smallest) < 0)
-               smallest = variant;
+         List<string> variants = GetVariants (sln);
+         string smallest = variants[0];
+         foreach (string v in variants)
+            if (v.CompareTo (smallest) < 0)
+               smallest = v;
          if (seen.Add (smallest))
             unique.Add (sln);
       }
@@ -65,12 +65,12 @@ class Program {
       #region Helper Methods --------------------
       // Rotating board by 90 degree
       int[] Rotate90 (int[] board) {
-         int[] r = new int[N];
+         int[] rot = new int[N];
          for (int row = 0; row < N; row++) {
             int col = board[row];
-            r[col] = N - 1 - row;
+            rot[col] = N - 1 - row;
          }
-         return r;
+         return rot;
       }
 
       // Mirror the solution
@@ -113,16 +113,13 @@ class Program {
             Print (VERTICAL);
          }
          PrintLine ("");
-         if (i < N - 1)
-            PrintLine (Border (MID));
+         if (i < N - 1) PrintLine (Border (MID));
       }
       PrintLine (Border (BOTTOM));
 
       // Builds a horizontal border line from the given corner and joint characters.
       static string Border (string pattern)
-         => pattern[0]
-            + string.Join (pattern[1], Enumerable.Repeat (HORIZONTAL, N))
-            + pattern[2];
+         => pattern[0] + string.Join (pattern[1], Enumerable.Repeat (HORIZONTAL, N)) + pattern[2];
    }
    // Prints text without moving to the next line.
    static void Print (string text) => Console.Write (text);
@@ -140,7 +137,6 @@ class Program {
    const string EMPTY = "    ";
    const string QUEEN = " ♕  ";
    const int N = 8; // Board Size
-
    #endregion
 }
 #endregion
