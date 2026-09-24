@@ -9,43 +9,46 @@ using System.Text;
 
 #region Program -----------------------------------------------------------------------------------
 class Program {
-   static int N = 8;
    static void Main () {
       Console.OutputEncoding = Encoding.UTF8;
-      Console.Write ("Enter A for all solutions or U for unique solutions: ");
+      Print ("Enter A for all solutions or U for unique solutions: ");
       string choice = Console.ReadLine ()?.ToUpper () ?? "";
       int[] board = new int[N];
       List<int[]> solns = [];
       Solve (board, 0, solns);
       if (choice == "A") {
-         Console.WriteLine ($"\nTotal solutions: {solns.Count}");
+         PrintLine ($"\nTotal solutions: {solns.Count}");
          for (int i = 0; i < solns.Count; i++) {
-            Console.WriteLine ($"\nSolution {(i + 1)}");
+            PrintLine ($"\nSolution {(i + 1)}");
             PrintBoard (solns[i]);
          }
       } else if (choice == "U") {
-         List<int[]> uniSoln = GetUniqueSolutions (solns);
-         Console.WriteLine ($"\nUnique solutions: {uniSoln.Count}");
-         for (int i = 0; i < uniSoln.Count; i++) {
-            Console.WriteLine ($"\nUnique Solution {(i + 1)}");
-            PrintBoard (uniSoln[i]);
+         List<int[]> unique = GetUniqueSolutions (solns);
+         PrintLine ($"\nUnique solutions: {unique.Count}");
+         for (int i = 0; i < unique.Count; i++) {
+            PrintLine ($"\nUnique Solution {(i + 1)}");
+            PrintBoard (unique[i]);
          }
-      } else Console.WriteLine ("Invalid choice.Enter A or U");
+      } else {
+         PrintLine ("Invalid choice. Enter A or U");
+      }
    }
 
-   #region - Implementation -----------------------------------------
-   //Find unique solns
+   #region Implementations -----------------------------------------
+   // Find unique solutions
    static List<int[]> GetUniqueSolutions (List<int[]> solutions) {
-      List<int[]> uniSlns = [];
+      List<int[]> unique = [];
       HashSet<string> seen = [];
-      foreach (int[] soln in solutions) {
-         List<string> v = GetVariants (soln);
+      foreach (int[] sln in solutions) {
+         List<string> v = GetVariants (sln);
          string smallest = v[0];
          foreach (string variant in v)
-            if (variant.CompareTo (smallest) < 0) smallest = variant;
-         if (seen.Add (smallest)) uniSlns.Add (soln);
+            if (variant.CompareTo (smallest) < 0)
+               smallest = variant;
+         if (seen.Add (smallest))
+            unique.Add (sln);
       }
-      return uniSlns;
+      return unique;
    }
 
    // Generate all rotation and mirror variations
@@ -53,12 +56,13 @@ class Program {
       List<string> variants = [];
       int[] current = (int[])board.Clone ();
       for (int i = 0; i < 4; i++) {
-         variants.Add (ToString (current));
-         variants.Add (ToString (Mirror (current)));
+         variants.Add (ToS (current));
+         variants.Add (ToS (Mirror (current)));
          current = Rotate90 (current);
       }
       return variants;
 
+      #region Helper Methods --------------------
       // Rotating board by 90 degree
       int[] Rotate90 (int[] board) {
          int[] r = new int[N];
@@ -69,23 +73,24 @@ class Program {
          return r;
       }
 
-      // Mirror the soln
+      // Mirror the solution
       int[] Mirror (int[] board) => [.. board.Reverse ()];
 
       // Converts array to string
-      string ToString (int[] board) => string.Join (",", board);
+      string ToS (int[] board) => string.Join (",", board);
+      #endregion
    }
 
    // Solving 8x8 queens using backtracking
    static void Solve (int[] board, int row, List<int[]> solutions) {
       if (row == N) {
          solutions.Add ((int[])board.Clone ());
-         return;
+         return; // Base condition for recursion
       }
       for (int col = 0; col < N; col++) {
          if (IsSafe (board, row, col)) {
             board[row] = col;
-            Solve (board, row + 1, solutions);
+            Solve (board, row + 1, solutions); // Backtracking through recursion
          }
       }
 
@@ -97,25 +102,33 @@ class Program {
       }
    }
 
-   // Displays the board for the given soln.
+   // Displays the board for the given solution
    static void PrintBoard (int[] solution) {
-      Console.WriteLine (Border (TOP));
-      for (int i = 0; i < S; i++) {
+      PrintLine (Border (TOP));
+      for (int i = 0; i < N; i++) {
          int placedQueen = solution[i];
-         Console.Write (VERTICAL);
-         for (int j = 0; j < S; j++) {
-            Console.Write (placedQueen == j ? QUEEN : EMPTY);
-            Console.Write (VERTICAL);
+         Print (VERTICAL);
+         for (int j = 0; j < N; j++) {
+            Print (placedQueen == j ? QUEEN : EMPTY);
+            Print (VERTICAL);
          }
-         Console.WriteLine ();
-         if (i < S - 1) Console.WriteLine (Border (MID));
+         PrintLine ("");
+         if (i < N - 1)
+            PrintLine (Border (MID));
       }
-      Console.WriteLine (Border (BOTTOM));
+      PrintLine (Border (BOTTOM));
 
       // Builds a horizontal border line from the given corner and joint characters.
       static string Border (string pattern)
-         => pattern[0] + string.Join (pattern[0], Enumerable.Repeat (HORIZONTAL, S)) + pattern[2];
+         => pattern[0]
+            + string.Join (pattern[1], Enumerable.Repeat (HORIZONTAL, N))
+            + pattern[2];
    }
+   // Prints text without moving to the next line.
+   static void Print (string text) => Console.Write (text);
+
+   // Prints text and moves to the next line.
+   static void PrintLine (string text) => Console.WriteLine (text);
    #endregion
 
    #region Constants ------------------------------------------------
@@ -126,7 +139,8 @@ class Program {
    const string HORIZONTAL = "────";
    const string EMPTY = "    ";
    const string QUEEN = " ♕  ";
-   const int S = 8;
+   const int N = 8; // Board Size
+
    #endregion
 }
 #endregion
