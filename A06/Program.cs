@@ -126,7 +126,7 @@ class Program {
 }
 #endregion
 
-#region Extensions -----------------------------------------------------------------------------
+#region Extensions --------------------------------------------------------------------------------
 
 static class BoardExtensions {
    /// <summary>Rotates the given array by 90 degrees</summary>
@@ -140,10 +140,10 @@ static class BoardExtensions {
       return rot;
    }
 
-   /// <summary>Creates a mirrored version of the solution</summary>
+   /// <summary>Returns vertical mirror of the given array</summary>
    public static int[] Mirror (this int[] arr) => [.. arr.Reverse ()];
 
-   /// <summary>Converts the solution into a string</summary>
+   /// <summary>Returns the given array as a string</summary>
    public static string ToS (this int[] arr) => string.Join (",", arr);
 }
 #endregion
