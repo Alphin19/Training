@@ -106,10 +106,10 @@ class Program {
       return pattern[0] + string.Join (pattern[1], Enumerable.Repeat (HORIZONTAL, N)) + pattern[2];
    }
 
-   // Prints str without moving to the next line
+   // Prints given string in same line
    static void Print (string str) => Console.Write (str);
 
-   // Prints str and moves to the next line
+   // Prints given string in the next line
    static void PrintLine (string str = "") => Console.WriteLine (str);
    #endregion
 
@@ -128,9 +128,8 @@ class Program {
 
 #region Extensions -----------------------------------------------------------------------------
 
-// Extension methods must be declared in a top-level static class
 static class BoardExtensions {
-   // Rotates the board by 90 degrees
+   /// <summary>Rotates the given array by 90 degrees</summary>
    public static int[] Rotate90 (this int[] arr) {
       int n = arr.Length;
       int[] rot = new int[n];
@@ -141,10 +140,10 @@ static class BoardExtensions {
       return rot;
    }
 
-   // Creates a mirrored version of the solution
-   public static int[] Mirror (this int[] board) => [.. board.Reverse ()];
+   /// <summary>Creates a mirrored version of the solution</summary>
+   public static int[] Mirror (this int[] arr) => [.. arr.Reverse ()];
 
-   // Converts the solution into a string
-   public static string ToS (this int[] board) => string.Join (",", board);
+   /// <summary>Converts the solution into a string</summary>
+   public static string ToS (this int[] arr) => string.Join (",", arr);
 }
 #endregion
