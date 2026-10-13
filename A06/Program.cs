@@ -29,12 +29,10 @@ class Program {
             PrintLine ($"\nUnique Solution {i + 1}");
             PrintBoard (unique[i]);
          }
-      } else {
-         PrintLine ("Invalid choice. Enter A or U");
-      }
+      } else PrintLine ("Invalid choice. Enter A or U");
    }
 
-   #region Implementations ------------------------------------------
+   #region Implementation ------------------------------------------
    // Find unique solutions
    static List<int[]> GetUniqueSolutions (List<int[]> slns) {
       List<int[]> unique = [];
@@ -66,16 +64,16 @@ class Program {
    static void Solve (int[] board, int row, List<int[]> slns) {
       if (row == N) {
          slns.Add ((int[])board.Clone ());
-         return;//Base condition for recursion
+         return; //Base condition for recursion
       }
       for (int col = 0; col < N; col++) {
          if (IsSafe (board, row, col)) {
             board[row] = col;
-            Solve (board, row + 1, slns);//Backtracking through recursion
+            Solve (board, row + 1, slns); //Backtracking through recursion
          }
       }
 
-      // Check whether the position is safe
+      // Check if the position is safe
       static bool IsSafe (int[] board, int row, int col) {
          for (int r = 0; r < row; r++)
             if (board[r] == col || Math.Abs (r - row) == Math.Abs (board[r] - col)) return false;
@@ -84,10 +82,10 @@ class Program {
    }
 
    // Displays the board for the given solution
-   static void PrintBoard (int[] solution) {
+   static void PrintBoard (int[] sln) {
       PrintLine (Border (TOP));
       for (int i = 0; i < N; i++) {
-         int queen = solution[i];
+         int queen = sln[i];
          Print (VERTICAL);
          for (int j = 0; j < N; j++) {
             Print (queen == j ? QUEEN : EMPTY);
