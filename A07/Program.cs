@@ -12,67 +12,76 @@ class Program {
          "0.000045", "+78.5", "9e4", "25.0", "7.", ".75", "4.5e", "8e+",
          "5.2e-2.5", "12abc", "--45", "3..14", "1.2*3", "-0.0045",
          "  56.789  ", "90E2", "+7.25e+2", "0.5e-4" ];
+      Write ($"{"Input",-18} {"Result",-15} {"Expected",-15} ");
+      WriteLine ("Status");
       foreach (string testCase in testCases) {
          double result = DoubleParse (testCase);
-         WriteLine ($"Input: \"{testCase}\"  Result: {result}");
+         double expected = double.TryParse (testCase, out double actual) ? actual : double.NaN;
+         bool passed = double.IsNaN (expected) ? double.IsNaN (result) : result.Equals (expected);
+         Write ($"{testCase,-18} {result,-15:G8} {expected,-15:G8} ");
+         ForegroundColor = passed ? ConsoleColor.Green : ConsoleColor.Red;
+         WriteLine (passed ? "PASS" : "FAIL");
+         ResetColor ();
       }
    }
    static double DoubleParse (string input) {
-      input = input.Trim ();
       if (input.Length == 0) return NAN;
-      int position = 0;
+      input = input.Trim ();
+      int pos = 0;
       bool hasDigits = false;
       bool isNegative = false;
-      double number = 0;
+      double num = 0;
+      // 1. Parse the sign
       if (input[0] == '+' || input[0] == '-') {
          isNegative = input[0] == '-';
-         position++;
+         pos++;
       }
-      while (position < input.Length && char.IsDigit (input[position])) {
-         int digit = input[position] - '0';
-         number = number * 10 + digit;
+      // 2. Parse the digits
+      while (pos < input.Length && char.IsDigit (input[pos])) {
+         num = num * 10 + (input[pos] - '0');
          hasDigits = true;
-         position++;
+         pos++;
       }
-      if (position < input.Length && input[position] == '.') {
-         position++;
-         double decimalNumber = 0;
-         int decimalDigits = 0;
-         while (position < input.Length && char.IsDigit (input[position])) {
-            int digit = input[position] - '0';
-            decimalNumber = decimalNumber * 10 + digit;
-            decimalDigits++;
+      // 3. Parse the decimal point and decimal digits
+      if (pos < input.Length && input[pos] == '.') {
+         pos++;
+         double decimalNo = 0;
+         double divisor = 1;
+         while (pos < input.Length && char.IsDigit (input[pos])) {
+            decimalNo = decimalNo * 10 + (input[pos] - '0');
+            divisor = divisor * 10;
             hasDigits = true;
-            position++;
+            pos++;
          }
-         number += decimalNumber / Math.Pow (10, decimalDigits);
+         num += decimalNo / divisor;
       }
       if (!hasDigits) return NAN;
-      if (position < input.Length &&
-          (input[position] == 'e' || input[position] == 'E')) {
-         position++;
-         bool exponentNegative = false;
-         // Parse exponent sign
-         if (position < input.Length &&
-             (input[position] == '+' || input[position] == '-')) {
-            exponentNegative = input[position] == '-';
-            position++;
+      if (pos < input.Length &&
+          (input[pos] == 'e' || input[pos] == 'E')) {
+         pos++;
+         bool expNegative = false;
+         // 4. Parse exponent sign
+         if (pos < input.Length &&
+             (input[pos] == '+' || input[pos] == '-')) {
+            expNegative = input[pos] == '-';
+            pos++;
          }
-         int exponent = 0;
-         bool hasExponentDigits = false;
-         while (position < input.Length && char.IsDigit (input[position])) {
-            int digit = input[position] - '0';
-            exponent = exponent * 10 + digit;
-            hasExponentDigits = true;
-            position++;
+         // 5. Parse the exponent digit
+         int exp = 0;
+         bool hasExpDigits = false;
+         while (pos < input.Length && char.IsDigit (input[pos])) {
+            int digit = input[pos] - '0';
+            exp = exp * 10 + digit;
+            hasExpDigits = true;
+            pos++;
          }
-         if (!hasExponentDigits) return NAN;
-         if (exponentNegative) exponent = -exponent;
-         number *= Math.Pow (10, exponent);
+         if (!hasExpDigits) return NAN;
+         if (expNegative) exp = -exp;
+         num *= Math.Pow (10, exp);
       }
-      if (position != input.Length) return NAN;
-      if (isNegative) number = -number;
-      return number;
+      if (pos != input.Length) return NAN;
+      // 6. Apply the sign and return parsed digit
+      return isNegative ? -num : num;
    }
    const double NAN = double.NaN;
 }
