@@ -6,7 +6,7 @@
 // A generic queue of T, using a circular buffer (array) as the underlying storage.
 // ------------------------------------------------------------------------------------------------
 
-#region Class TQueue ------------------------------------------------------------------------------
+#region class TQueue ------------------------------------------------------------------------------
 /// <summary>A generic FIFO queue backed by a growable circular buffer</summary>
 class TQueue<T> {
    #region Properties -----------------------------------------------
@@ -36,11 +36,11 @@ class TQueue<T> {
    #region Implementation -------------------------------------------
    // Doubles the capacity, copying the items in queue order so the head moves back to index 0
    void Grow () {
-      var bigger = new T[mData.Length * 2];
+      var newData = new T[mData.Length * 2];
       int first = Math.Min (mCount, mData.Length - mHead);
-      Array.Copy (mData, mHead, bigger, 0, first);
-      Array.Copy (mData, 0, bigger, first, mCount - first);
-      mData = bigger;
+      Array.Copy (mData, mHead, newData, 0, first);
+      Array.Copy (mData, 0, newData, first, mCount - first);
+      mData = newData;
       mHead = 0;
    }
    #endregion

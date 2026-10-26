@@ -7,7 +7,7 @@
 // ------------------------------------------------------------------------------------------------
 using static System.Console;
 
-#region Class TestCases ---------------------------------------------------------------------------
+#region class TestCases ---------------------------------------------------------------------------
 /// <summary>Runs test cases for the circular-buffer queue</summary>
 class TestCases {
    #region Implementation -------------------------------------------
@@ -36,27 +36,27 @@ class TestCases {
    // Tests whether the queue reuses freed array slots correctly
    static bool WrapAround () {
       var q = new TQueue<int> ();
-      Fill (q, 1, 2, 3, 4);
+      enqueueAll (q, 1, 2, 3, 4);
       q.Dequeue ();
       q.Dequeue ();
-      Fill (q, 5, 6);
-      return Drains (q, 3, 4, 5, 6);
+      enqueueAll (q, 5, 6);
+      return dequeueMatches (q, 3, 4, 5, 6);
    }
 
    // Tests whether the queue grows when its capacity is exceeded
    static bool GrowWhenFull () {
       var q = new TQueue<int> ();
-      Fill (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-      return Drains (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+      enqueueAll (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+      return dequeueMatches (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
    }
 
    // Tests whether the queue grows correctly when the buffer is wrapped
    static bool GrowAfterWrap () {
       var q = new TQueue<char> ();
-      Fill (q, 'A', 'B', 'C', 'D');
+      enqueueAll (q, 'A', 'B', 'C', 'D');
       q.Dequeue (); q.Dequeue ();
-      Fill (q, 'E', 'F', 'G');
-      return Drains (q, 'C', 'D', 'E', 'F', 'G');
+      enqueueAll (q, 'E', 'F', 'G');
+      return dequeueMatches (q, 'C', 'D', 'E', 'F', 'G');
    }
 
    // Runs a test case and records whether it passed or failed
@@ -71,12 +71,12 @@ class TestCases {
    }
 
    // Adds the given elements to the queue in order
-   static void Fill<T> (TQueue<T> q, params T[] items) {
+   static void enqueueAll<T> (TQueue<T> q, params T[] items) {
       foreach (T item in items) q.Enqueue (item);
    }
 
    // Tests whether the queue returns the expected elements and becomes empty
-   static bool Drains<T> (TQueue<T> q, params T[] expected) {
+   static bool dequeueMatches<T> (TQueue<T> q, params T[] expected) {
       foreach (T item in expected)
          if (q.IsEmpty || !EqualityComparer<T>.Default.Equals (q.Dequeue (), item)) return false;
       return q.IsEmpty;
