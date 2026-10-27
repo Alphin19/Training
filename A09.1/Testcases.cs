@@ -36,27 +36,27 @@ class TestCases {
    // Tests whether the queue reuses freed array slots correctly
    static bool WrapAround () {
       var q = new TQueue<int> ();
-      enqueueAll (q, 1, 2, 3, 4);
+      EnqueueAll (q, 1, 2, 3, 4);
       q.Dequeue ();
       q.Dequeue ();
-      enqueueAll (q, 5, 6);
-      return dequeueMatches (q, 3, 4, 5, 6);
+      EnqueueAll (q, 5, 6);
+      return DequeueMatches (q, 3, 4, 5, 6);
    }
 
    // Tests whether the queue grows when its capacity is exceeded
    static bool GrowWhenFull () {
       var q = new TQueue<int> ();
-      enqueueAll (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-      return dequeueMatches (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+      EnqueueAll (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+      return DequeueMatches (q, 1, 2, 3, 4, 5, 6, 7, 8, 9);
    }
 
    // Tests whether the queue grows correctly when the buffer is wrapped
    static bool GrowAfterWrap () {
       var q = new TQueue<char> ();
-      enqueueAll (q, 'A', 'B', 'C', 'D');
+      EnqueueAll (q, 'A', 'B', 'C', 'D');
       q.Dequeue (); q.Dequeue ();
-      enqueueAll (q, 'E', 'F', 'G');
-      return dequeueMatches (q, 'C', 'D', 'E', 'F', 'G');
+      EnqueueAll (q, 'E', 'F', 'G');
+      return DequeueMatches (q, 'C', 'D', 'E', 'F', 'G');
    }
 
    // Runs a test case and records whether it passed or failed
@@ -71,12 +71,12 @@ class TestCases {
    }
 
    // Adds the given elements to the queue in order
-   static void enqueueAll<T> (TQueue<T> q, params T[] items) {
+   static void EnqueueAll<T> (TQueue<T> q, params T[] items) {
       foreach (T item in items) q.Enqueue (item);
    }
 
    // Tests whether the queue returns the expected elements and becomes empty
-   static bool dequeueMatches<T> (TQueue<T> q, params T[] expected) {
+   static bool DequeueMatches<T> (TQueue<T> q, params T[] expected) {
       foreach (T item in expected)
          if (q.IsEmpty || !EqualityComparer<T>.Default.Equals (q.Dequeue (), item)) return false;
       return q.IsEmpty;
