@@ -1,5 +1,4 @@
-﻿
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Training ~ A training program for new joinees at Metamation, Batch - July 2026.
 // Copyright (c) TRUMPF Metamation India.
 // ------------------------------------------------------------------------------------------------
@@ -23,8 +22,7 @@ static class FileNameParser {
             (A, >= 'A' and <= 'Z') => (B, () => drive.Append (ch)),
             (B, ':') => (C, () => drive.Append (ch)),
             (C, '\\') => (D, none),
-            (D, >= 'A' and <= 'Z') => (E, () => name.Append (ch)),
-            (E, >= 'A' and <= 'Z') => (E, () => name.Append (ch)),
+            (D or E, >= 'A' and <= 'Z') => (E, () => name.Append (ch)),
             (E, '\\') => (F, () => {
                folder.Append (name);
                name.Clear ();
@@ -41,8 +39,7 @@ static class FileNameParser {
       // Input must end inside the extension to be accepted
       if (state == I) state = J;
       return state == J
-         ? (drive.ToString (), folder.ToString (), name.ToString (), extension.ToString ())
-         : null;
+         ? (drive.ToString (), folder.ToString (), name.ToString (), extension.ToString ()) : null;
    }
    #endregion
 }
