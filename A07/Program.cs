@@ -49,7 +49,7 @@ class Program {
          double divisor = 1;
          while (pos < input.Length && char.IsDigit (input[pos])) {
             decimalNo = decimalNo * 10 + (input[pos] - '0');
-            divisor = divisor * 10;
+            divisor *= 10;
             hasDigits = true;
             pos++;
          }
@@ -70,8 +70,7 @@ class Program {
          int exp = 0;
          bool hasExpDigits = false;
          while (pos < input.Length && char.IsDigit (input[pos])) {
-            int digit = input[pos] - '0';
-            exp = exp * 10 + digit;
+            exp = exp * 10 + input[pos] - '0';
             hasExpDigits = true;
             pos++;
          }
