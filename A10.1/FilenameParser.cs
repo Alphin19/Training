@@ -5,7 +5,6 @@
 // FilenameParser.cs
 // Implementation of file name parser using a state machine.
 // ------------------------------------------------------------------------------------------------
-using System.Text;
 using static EParserState;
 
 #region Class FilenameParser ----------------------------------------------------------------------
@@ -14,41 +13,34 @@ class FilenameParser {
    #region Methods --------------------------------------------------
    /// <summary>Parses a file path and extracts the drive, folder, file name and extension</summary>
    public static (string Drive, string Folder, string File, string Extension)? Parse (string input) {
-      if (input is null) return null;
       EParserState state = A;
       Action none = () => { }, action;
-      StringBuilder drive = new (), folder = new (), name = new (), extension = new ();
+      string drive = "", folder = "", name = "", extension = "";
       foreach (var ch in input + '~') {
          (state, action) = (state, ch) switch {
-            (A, >= 'A' and <= 'Z') => (B, () => drive.Append (ch)),
-            (B, ':') => (C, () => drive.Append (ch)),
+            (A, >= 'A' and <= 'Z') => (B, () => drive += ch),
+            (B, ':') => (C, () => drive += ch),
             (C, '\\') => (D, none),
-            (D or E, >= 'A' and <= 'Z') => (E, () => name.Append (ch)),
-            (E, '\\') => (D, () => {
-               folder.Append (folder.Length > 0 ? "\\" : "").Append (name); name.Clear ();
-            }
-            ),
+            (D or E, >= 'A' and <= 'Z') => (E, () => name += ch),
+            (E, '\\') => (D, () => (folder, name) = (folder.Length > 0 ? $"{folder}\\{name}" : name, "")),
             (E, '.') => (F, none),
-            (F or G, >= 'A' and <= 'Z') => (G, () => extension.Append (ch)),
+            (F or G, >= 'A' and <= 'Z') => (G, () => extension += ch),
             (G, '~') => (H, none),
             _ => (Error, none)
          };
          action ();
-         if (state == Error) break;
+         if (state == Error) return null;
       }
-      return state == H && folder.Length > 0
-   ? (drive.ToString (), folder.ToString (), name.ToString (), extension.ToString ()) : null;
+      return state == H && folder.Length > 0 ? (drive, folder, name, extension) : null;
    }
-   #endregion
 }
-#endregion
 
-#region enum EParserState  ------------------------------------------------------------------------
-/// <summary>States of the file-name state machine; A..H match the labels in the state diagram</summary>
+#region enum EParserState  ---------------------------------------------------------------------
+/// <summary>States A–H of the file-name parser, corresponding to the state diagram</summary>
 enum EParserState {
    A,        // Start: expects the drive letter
    B,        // Drive letter read: expects ':'
-   C,        // ':' read: expects '\'
+   C,        // ':' read: expects '\'States of the file-name state machine
    D,        // '\' read: expects a folder or file name
    E,        // Inside a folder or file name: expects A..Z, '\' or '.'
    F,        // '.' read: expects the extension
@@ -56,4 +48,7 @@ enum EParserState {
    H,        // Accepted
    Error     // Rejected
 }
+
+#endregion
+#endregion
 #endregion
