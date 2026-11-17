@@ -48,7 +48,6 @@ enum EParserState {
    H,        // Accepted
    Error     // Rejected
 }
-
 #endregion
 #endregion
 #endregion
