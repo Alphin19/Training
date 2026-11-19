@@ -5,7 +5,6 @@
 // TestCases.cs
 // Test cases for the generic double-ended queue.
 // ------------------------------------------------------------------------------------------------
-
 using static System.Console;
 
 #region Class TestCases ---------------------------------------------------------------------------
@@ -32,7 +31,9 @@ class TestCases {
       TestGenericType ();
       WriteLine ($"\n{mPassed} passed, {mFailed} failed");
    }
+   #endregion
 
+   #region Implementation -------------------------------------------
    // Checks the initial state of the deque
    static void TestInitialState () {
       var deque = new TDeque<int> ();
