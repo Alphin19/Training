@@ -1,5 +1,4 @@
-﻿
-// ------------------------------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------------------------------
 // Training ~ A training program for new joinees at Metamation, Batch - July 2026.
 // Copyright (c) TRUMPF Metamation India.
 // ------------------------------------------------------------------------------------------------
@@ -12,7 +11,7 @@ using static System.Console;
 #region Class TestCases ---------------------------------------------------------------------------
 /// <summary>Tests the generic double-ended queue implementation</summary>
 class TestCases {
-   #region Methods --------------------------------------------------------------------------------
+   #region Methods --------------------------------------------------
    /// <summary>Runs all test cases for the double-ended queue</summary>
    public static void Run () {
       TestInitialState ();
@@ -211,13 +210,14 @@ class TestCases {
          ForegroundColor = ConsoleColor.Green;
          WriteLine ($"[PASS] {name}");
       } else {
-         mFailed++;         
+         mFailed++;
+         ForegroundColor = ConsoleColor.Green;
          WriteLine ($"[FAIL] {name}");
       }
    }
    #endregion
 
-   #region Private data ---------------------------------------------------------------------------
+   #region Private Data ---------------------------------------------
    static int mPassed, mFailed;
    #endregion
 }

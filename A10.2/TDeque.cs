@@ -1,11 +1,12 @@
-﻿
+﻿// ------------------------------------------------------------------------------------------------
+// Training ~ A training program for new joinees at Metamation, Batch - July 2026.
+// Copyright (c) TRUMPF Metamation India.
 // ------------------------------------------------------------------------------------------------
 // TDeque.cs
 // A generic double-ended queue implemented using a circular array.
 // ------------------------------------------------------------------------------------------------
 
 #region Class TDeque ------------------------------------------------------------------------------
-
 /// <summary>A double-ended queue backed by a growable circular array</summary>
 class TDeque<T> {
    #region Fields ---------------------------------------------------------------------------------
@@ -15,18 +16,15 @@ class TDeque<T> {
    int mCount;
    #endregion
 
-   #region Properties -----------------------------------------------------------------------------
-
+   #region Properties -----------------------------------------------
    /// <summary>Gets the number of items in the deque</summary>
    public int Count => mCount;
 
    /// <summary>Returns true when the deque contains no items</summary>
    public bool IsEmpty => mCount == 0;
-
    #endregion
 
-   #region Constructor -----------------------------------------------------------------------------
-
+   #region Constructor ----------------------------------------------
    /// <summary>Initializes the deque with the specified capacity</summary>
    public TDeque (int capacity = 4) {
       if (capacity <= 0) throw new ArgumentOutOfRangeException (nameof (capacity));
@@ -35,10 +33,9 @@ class TDeque<T> {
       mTail = -1;
       mCount = 0;
    }
-
    #endregion
 
-   #region Methods --------------------------------------------------------------------------------
+   #region Methods --------------------------------------------------
    /// <summary>Adds an item at the front of the deque</summary>
    public void AddFirst (T item) {
       EnsureCapacity ();
