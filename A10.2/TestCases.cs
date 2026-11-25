@@ -29,7 +29,7 @@ class TestCases {
       TestGrowthAfterRearWrap ();
       TestCount ();
       TestGenericType ();
-      WriteLine ($"\n{mPassed} passed, {mFailed} failed");
+      WriteLine ($"\n{sPassed} passed, {sFailed} failed");
    }
    #endregion
 
@@ -206,20 +206,15 @@ class TestCases {
 
    // Displays and records the test result
    static void Check (string name, bool passed) {
-      if (passed) {
-         mPassed++;
-         ForegroundColor = ConsoleColor.Green;
-         WriteLine ($"[PASS] {name}");
-      } else {
-         mFailed++;
-         ForegroundColor = ConsoleColor.Green;
-         WriteLine ($"[FAIL] {name}");
-      }
+      if (passed) sPassed++; else sFailed++;
+      ForegroundColor = passed ? ConsoleColor.Green : ConsoleColor.Red;
+      WriteLine ($"[{(passed ? "PASS" : "FAIL")}] {name}");
+      ResetColor ();
    }
    #endregion
 
    #region Private Data ---------------------------------------------
-   static int mPassed, mFailed;
+   static int sPassed, sFailed;
    #endregion
 }
 #endregion

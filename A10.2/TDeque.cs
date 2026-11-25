@@ -16,16 +16,15 @@ class TDeque<T> {
       mItems = new T[capacity];
       mHead = 0;
       mTail = -1;
-      mCount = 0;
    }
    #endregion
 
    #region Properties -----------------------------------------------
    /// <summary>Gets the number of items in the deque</summary>
-   public int Count => mCount;
+   public int Count { get; private set; }
 
    /// <summary>Returns true when the deque contains no items</summary>
-   public bool IsEmpty => mCount == 0;
+   public bool IsEmpty => Count == 0;
    #endregion
 
    #region Methods --------------------------------------------------
@@ -35,7 +34,7 @@ class TDeque<T> {
       if (IsEmpty) mHead = mTail = 0;
       else mHead = (mHead - 1 + mItems.Length) % mItems.Length;
       mItems[mHead] = item;
-      mCount++;
+      Count++;
    }
 
    /// <summary>Adds an item at the rear of the deque</summary>
@@ -44,7 +43,21 @@ class TDeque<T> {
       if (IsEmpty) mHead = mTail = 0;
       else mTail = (mTail + 1) % mItems.Length;
       mItems[mTail] = item;
-      mCount++;
+      Count++;
+   }
+
+   /// <summary>Returns the first item without removing it</summary>
+   public T PeekFirst () {
+      if (IsEmpty)
+         throw new InvalidOperationException ("Deque is empty.");
+      return mItems[mHead];
+   }
+
+   /// <summary>Returns the last item without removing it</summary>
+   public T PeekLast () {
+      if (IsEmpty)
+         throw new InvalidOperationException ("Deque is empty.");
+      return mItems[mTail];
    }
 
    /// <summary>Removes and returns the item at the front</summary>
@@ -52,7 +65,7 @@ class TDeque<T> {
       if (IsEmpty) throw new InvalidOperationException ("Deque is empty.");
       T item = mItems[mHead];
       mItems[mHead] = default!;
-      mCount--;
+      Count--;
       if (IsEmpty) {
          mHead = 0; mTail = -1;
       } else mHead = (mHead + 1) % mItems.Length;
@@ -64,7 +77,7 @@ class TDeque<T> {
       if (IsEmpty) throw new InvalidOperationException ("Deque is empty.");
       T item = mItems[mTail];
       mItems[mTail] = default!;
-      mCount--;
+      Count--;
       if (IsEmpty) {
          mHead = 0; mTail = -1;
       } else mTail = (mTail - 1 + mItems.Length) % mItems.Length;
@@ -75,12 +88,14 @@ class TDeque<T> {
    #region Implementation -------------------------------------------
    /// <summary>Increases capacity when the array becomes full</summary>
    void EnsureCapacity () {
-      if (mCount < mItems.Length) return;
+      if (Count < mItems.Length) return;
       T[] expanded = new T[mItems.Length * 2];
-      for (int i = 0; i < mCount; i++) expanded[i] = mItems[(mHead + i) % mItems.Length];
+      int firstSegmentLength = Math.Min (Count, mItems.Length - mHead);
+      Array.Copy (mItems, mHead, expanded, 0, firstSegmentLength);
+      Array.Copy (mItems, 0, expanded, firstSegmentLength, Count - firstSegmentLength);
       mItems = expanded;
       mHead = 0;
-      mTail = mCount - 1;
+      mTail = Count - 1;
    }
    #endregion
 
@@ -88,7 +103,6 @@ class TDeque<T> {
    T[] mItems;
    int mHead;
    int mTail;
-   int mCount;
    #endregion
 }
 #endregion
