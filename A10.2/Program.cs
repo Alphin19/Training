@@ -10,9 +10,7 @@
 /// <summary>Entry point of the application</summary>
 class Program {
    #region Methods --------------------------------------------------
-   static void Main () {
-      TestCases.Run ();
-   }
+   static void Main () =>TestCases.Run ();
    #endregion
 }
 #endregion

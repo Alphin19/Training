@@ -10,7 +10,7 @@
 /// <summary>A double-ended queue backed by a growable circular array</summary>
 class TDeque<T> {
    #region Constructors ---------------------------------------------
-   /// <summary>Initializes the deque with the specified capacity</summary>
+   /// <summary>Initializes the deque with the specified len</summary>
    public TDeque (int capacity = 4) {
       if (capacity <= 0) throw new ArgumentOutOfRangeException (nameof (capacity));
       mItems = new T[capacity];
@@ -31,8 +31,9 @@ class TDeque<T> {
    /// <summary>Adds an item at the front of the deque</summary>
    public void AddFirst (T item) {
       EnsureCapacity ();
+      int len = mItems.Length;
       if (IsEmpty) mHead = mTail = 0;
-      else mHead = (mHead - 1 + mItems.Length) % mItems.Length;
+      else mHead = (mHead - 1 + len) % len;
       mItems[mHead] = item;
       Count++;
    }
@@ -40,69 +41,75 @@ class TDeque<T> {
    /// <summary>Adds an item at the rear of the deque</summary>
    public void AddLast (T item) {
       EnsureCapacity ();
+      int len = mItems.Length;
       if (IsEmpty) mHead = mTail = 0;
-      else mTail = (mTail + 1) % mItems.Length;
+      else mTail = (mTail + 1) % len;
       mItems[mTail] = item;
       Count++;
    }
 
    /// <summary>Returns the first item without removing it</summary>
    public T PeekFirst () {
-      if (IsEmpty)
-         throw new InvalidOperationException ("Deque is empty.");
+      ThrowIfEmpty ();
       return mItems[mHead];
    }
 
    /// <summary>Returns the last item without removing it</summary>
    public T PeekLast () {
-      if (IsEmpty)
-         throw new InvalidOperationException ("Deque is empty.");
+      ThrowIfEmpty ();
       return mItems[mTail];
    }
 
    /// <summary>Removes and returns the item at the front</summary>
    public T RemoveFirst () {
-      if (IsEmpty) throw new InvalidOperationException ("Deque is empty.");
+      ThrowIfEmpty ();
+      int len = mItems.Length;
       T item = mItems[mHead];
       mItems[mHead] = default!;
       Count--;
       if (IsEmpty) {
          mHead = 0; mTail = -1;
-      } else mHead = (mHead + 1) % mItems.Length;
+      } else mHead = (mHead + 1) % len;
       return item;
    }
 
    /// <summary>Removes and returns the item at the rear</summary>
    public T RemoveLast () {
-      if (IsEmpty) throw new InvalidOperationException ("Deque is empty.");
+      ThrowIfEmpty ();
+      int len = mItems.Length;
       T item = mItems[mTail];
       mItems[mTail] = default!;
       Count--;
       if (IsEmpty) {
          mHead = 0; mTail = -1;
-      } else mTail = (mTail - 1 + mItems.Length) % mItems.Length;
+      } else mTail = (mTail - 1 + len) % len;
       return item;
    }
    #endregion
 
    #region Implementation -------------------------------------------
-   /// <summary>Increases capacity when the array becomes full</summary>
+   // Increases len when the array becomes full
    void EnsureCapacity () {
-      if (Count < mItems.Length) return;
-      T[] expanded = new T[mItems.Length * 2];
-      int firstSegmentLength = Math.Min (Count, mItems.Length - mHead);
+      int len = mItems.Length;
+      if (Count < len) return;
+      T[] expanded = new T[len * 2];
+      int firstSegmentLength = Math.Min (Count, len - mHead);
       Array.Copy (mItems, mHead, expanded, 0, firstSegmentLength);
       Array.Copy (mItems, 0, expanded, firstSegmentLength, Count - firstSegmentLength);
       mItems = expanded;
       mHead = 0;
       mTail = Count - 1;
    }
+
+   // Throws an exception when the deque is empty
+   void ThrowIfEmpty () {
+      if (IsEmpty) throw new InvalidOperationException ("Deque is empty.");
+   }
    #endregion
 
    #region Private Data ---------------------------------------------
    T[] mItems;
-   int mHead;
-   int mTail;
+   int mHead, mTail;
    #endregion
 }
 #endregion

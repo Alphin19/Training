@@ -193,8 +193,7 @@ class TestCases {
    // Checks the deque contents against the expected order
    static bool VerifyOrder (TDeque<int> deque, params int[] expected) {
       if (deque.Count != expected.Length) return false;
-      foreach (int item in expected)
-         if (deque.RemoveFirst () != item) return false;
+      foreach (int item in expected) if (deque.RemoveFirst () != item) return false;
       return deque.IsEmpty;
    }
 
