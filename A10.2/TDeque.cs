@@ -88,7 +88,7 @@ class TDeque<T> {
    #endregion
 
    #region Implementation -------------------------------------------
-   // Increases len when the array becomes full
+   // Increases capacity when the array becomes full
    void EnsureCapacity () {
       int len = mItems.Length;
       if (Count < len) return;
