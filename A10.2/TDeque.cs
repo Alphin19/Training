@@ -6,10 +6,10 @@
 // A generic double-ended queue implemented using a circular array.
 // ------------------------------------------------------------------------------------------------
 
-#region Class TDeque ------------------------------------------------------------------------------
+#region class TDeque ------------------------------------------------------------------------------
 /// <summary>A double-ended queue backed by a growable circular array</summary>
 class TDeque<T> {
-   #region Constructors ---------------------------------------------
+   #region Constructor ----------------------------------------------
    /// <summary>Initializes the deque with the specified len</summary>
    public TDeque (int capacity = 4) {
       if (capacity <= 0) throw new ArgumentOutOfRangeException (nameof (capacity));
@@ -61,30 +61,10 @@ class TDeque<T> {
    }
 
    /// <summary>Removes and returns the item at the front</summary>
-   public T RemoveFirst () {
-      ThrowIfEmpty ();
-      int len = mItems.Length;
-      T item = mItems[mHead];
-      mItems[mHead] = default!;
-      Count--;
-      if (IsEmpty) {
-         mHead = 0; mTail = -1;
-      } else mHead = (mHead + 1) % len;
-      return item;
-   }
+   public T RemoveFirst () => Remove (true);
 
    /// <summary>Removes and returns the item at the rear</summary>
-   public T RemoveLast () {
-      ThrowIfEmpty ();
-      int len = mItems.Length;
-      T item = mItems[mTail];
-      mItems[mTail] = default!;
-      Count--;
-      if (IsEmpty) {
-         mHead = 0; mTail = -1;
-      } else mTail = (mTail - 1 + len) % len;
-      return item;
-   }
+   public T RemoveLast () => Remove (false);
    #endregion
 
    #region Implementation -------------------------------------------
@@ -99,6 +79,25 @@ class TDeque<T> {
       mItems = expanded;
       mHead = 0;
       mTail = Count - 1;
+   }
+
+   // Removes an item from the specified end
+   T Remove (bool first) {
+      ThrowIfEmpty ();
+      int len = mItems.Length;
+      int index = first ? mHead : mTail;
+      T item = mItems[index];
+      mItems[index] = default!;
+      Count--;
+      if (IsEmpty) {
+         mHead = 0;
+         mTail = -1;
+      } else if (first) {
+         mHead = (mHead + 1) % len;
+      } else {
+         mTail = (mTail - 1 + len) % len;
+      }
+      return item;
    }
 
    // Throws an exception when the deque is empty

@@ -7,7 +7,7 @@
 // ------------------------------------------------------------------------------------------------
 using static System.Console;
 
-#region Class TestCases ---------------------------------------------------------------------------
+#region class TestCases ---------------------------------------------------------------------------
 /// <summary>Tests the generic double-ended queue implementation</summary>
 class TestCases {
    #region Methods --------------------------------------------------
