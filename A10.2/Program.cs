@@ -6,7 +6,7 @@
 // Entry point for the double ended queue implementation.
 // ------------------------------------------------------------------------------------------------
 
-#region Class Program -----------------------------------------------------------------------------
+#region class Program -----------------------------------------------------------------------------
 /// <summary>Entry point of the application</summary>
 class Program {
    #region Methods --------------------------------------------------
